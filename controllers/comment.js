@@ -22,7 +22,25 @@ const db = require('../db');
         res.status(200).json(data);
     })
 }
+ const deleteComment = (req,res )=> {
+    const q = "DELETE FROM comments WHERE id = ?;";
+    db.query(q , [req.params.id],(err,data) => {
+        if(err) return res.status(404).json({message:"Error when delete commment" ,error:err});
+        if(data.affectedRows <= 0) return  res.status(200).json({message:"Delete failed"});
+        res.status(200).json({message:"Delete successfully"});
+    })
+}
+ const updateComment = (req,res )=> {
+    const q = "UPDATE comments AS c  SET c.desc = ? WHERE id = ?"
+    db.query(q , [req.body.desc , req.body.id],(err,data) => {
+        if(err) return res.status(404).json({message:"Error when Update commment" ,error:err});
+        if(data.affectedRows <= 0) return  res.status(200).json({message:"Update failed"});
+        res.status(200).json({message:"Update successfully"});
+    })
+}
 module.exports = {
     addComment,
-    getComments
+    getComments,
+    deleteComment,
+    updateComment
 }
